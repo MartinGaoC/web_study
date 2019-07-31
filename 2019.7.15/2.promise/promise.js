@@ -16,6 +16,7 @@ class Promise {
                 this.reason = reason
             }
         }
+        console.log()
         executor(resolve,reject)
     }
     then(onFulfilled,onRejected){
