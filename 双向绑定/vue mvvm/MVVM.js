@@ -68,8 +68,9 @@ class Compiler{
          // 判断是不是指令
            if(this.isDirective(name)){
                 let [,directive]=name.split('-');
+                let [directiveName,eventName] = directive.split(':');
                 // 调用不同的指令来处理
-                CompileUtil[directive](node,expr,this.vm)
+                CompileUtil[directiveName](node,expr,this.vm,eventName)
                 console.log(name)
            }
         })
@@ -143,13 +144,26 @@ CompileUtil = {
         let value = this.getVal(vm,expr);
         fn(node,value)
     },
-    html(){
+    html(node,expr,vm){
+        // 给输入框赋予value属性
+        let fn = this.updater['htmlUpdater'];
+        new Watcher(vm,expr,(newVal)=>{  // 给输入框加一个观察者  如果稍后数据更新了会触发此方法，会拿新值给输入框赋予值。
+            fn(node,newVal);
+        })
+       
+        let value = this.getVal(vm,expr);
+        fn(node,value)
         // 把html变成内容插入到dom里  node.innerHTMl = xxx
     },
     getContentValue(vm,expr){
         //遍历表达式  将内容重新替换成一个完整的内容 返还回去
         return expr.replace(/\{\{(.+?)\}\}/g,(...args) => {
             return this.getVal(vm, args[1]);
+        })
+    },
+    on(node,expr,vm,eventName){
+        node.addEventListener(eventName,(e)=>{
+            vm[expr].call(vm,e);  
         })
     },
     text(node,expr,vm){  // 
@@ -168,8 +182,8 @@ CompileUtil = {
         modelUpdater(node, value){
             node.value = value 
         },
-        htmlUpdater(){
-
+        htmlUpdater(node,value){
+            node.innerHTML = value
         },
         textUpdater(node, value){
             node.textContent = value
@@ -220,6 +234,7 @@ class Vue{
         this.$el = options.el;
         this.$data = options.data;
         let computed = options.computed
+        let methods = options.methods
         // 这个根元素存在  编译模版
         if(this.$el){
 
@@ -237,6 +252,14 @@ class Vue{
                     }
                 })
             }
+
+            for(let key in methods){
+                Object.defineProperty(this,key,{
+                    get(){
+                        return methods[key];
+                    }
+                })
+            }
             // 把数据获取操作 vm上的取值操作都代理到vm.$data
             this.proxyVm(this.$data);
 
@@ -248,6 +271,9 @@ class Vue{
             Object.defineProperty(this,key,{  // 实现可以通过vm取到对应的内容
                 get(){
                     return data[key]  //进行转化操作
+                },
+                set(newVal){
+                    data[key] = newVal;
                 }
             })
         }

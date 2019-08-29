@@ -16,6 +16,8 @@
             <li>1</li>
             <li>1</li>
         </ul>
+        <button v-on:click="change">更新操作 </button>
+        <div v-html='message'></div>
     </div>
     <script src="MVVM.js"></script>
     <script>
@@ -25,11 +27,17 @@
                 school:{
                     name:"珠峰",
                     age:10
-                }
+                },
+                message:'<h1>asdsd<h1>'
             },
             computed:{
                 getNewName(){
                     return this.school.name + "架构"
+                }
+            },
+            methods:{
+                change(){
+                    this.school.name = '高超'
                 }
             }
         })
