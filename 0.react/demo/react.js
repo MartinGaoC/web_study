@@ -17,6 +17,7 @@ function createElement(type,config,children){
     const props = {
 
     }
+    
     for(propName in config){
         props[propName] = config[propName]
     }
@@ -28,4 +29,4 @@ function createElement(type,config,children){
     }
     return ReactElement(type,props);
 }
-export default {createElement};
+export default {createElement,Component};

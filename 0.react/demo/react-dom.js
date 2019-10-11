@@ -1,15 +1,17 @@
-function render(element,parentNode){
+function render(element,container){
     if(typeof element == 'string'|| typeof element == 'number'){
-        return parentNode.appendChild(document.createTextNode(element));
+        return container.appendChild(document.createTextNode(element));
     }
     let type, props;
     type = element.type;
     props = element.props;
-    if(type.isReactCpmponent){
+    
+    if(type.isReactComponent == true){
         let returnedElement = new type(props).render();
         type = returnedElement.type;
         props = returnedElement.props;
-    } else if(typeof type == 'function' ){
+    } else if(typeof type === 'function'){
+        
         let returnedElement = type(props)
         type = returnedElement.type;
         props = returnedElement.props;
@@ -45,6 +47,6 @@ function render(element,parentNode){
             domElement.setAttribute(propName,props[propName]);
         }
     }
-    parentNode.appendChild(domElement)
+    container.appendChild(domElement)
 }
 export default {render};
