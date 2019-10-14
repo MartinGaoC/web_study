@@ -1,16 +1,16 @@
 import React,{Component} from 'react';
 import store from '../store';
 import * as types from '../store/action-types';
-import {bindActionCreators} from '../redux/'
+import {bindActionCreators} from '../redux'
 function increment(payload){  // actionCreator  action创建的函数
     return{
-        type:types.INCREMENT,
+        type:types.INCREMENT2,
         payload
     }
 }
 function decrement(payload){
     return{
-        type:types.DECREMENT,
+        type:types.DECREMENT2,
         payload
     }
 }
@@ -21,11 +21,11 @@ let actions = {increment,decrement};
 actions = bindActionCreators(actions,store.dispatch);
 export default class Counter extends Component{
 
-    state={number:store.getState().number}
+    state={number:store.getState().counter2.number}
     componentDidMount(){
         
         this.unsubscribe = store.subscribe(()=>{
-            this.setState({number:store.getState().number});
+            this.setState({number:store.getState().counter2.number});
         });
     }
     componentWillUnmount(){
