@@ -1,43 +1,42 @@
-import React,{Component} from 'react';
-import store from '../store';
-import * as types from '../store/action-types';
-import {bindActionCreators} from '../redux/'
-function increment(payload){  // actionCreator  action创建的函数
-    return{
-        type:types.INCREMENT,
-        payload
-    }
-}
-function decrement(payload){
-    return{
-        type:types.DECREMENT,
-        payload
-    }
-}
-let actions = {increment,decrement};
-// bindActionCreators 绑定 actionCeators actionCreators 跟dispatch自动绑定在一起
-// let increments = bindActionCreators(increment,store.dispatch);
-// let decrements = bindActionCreators(decrement,store.dispatch);
-actions = bindActionCreators(actions,store.dispatch);
-export default class Counter extends Component{
+import React, { Component } from 'react';
+import store from '../store'
+import * as types from '../store/action-types'
+import { bindActionCreators } from '../redux'
 
-    state={number:store.getState().number}
+function increment (payload) {
+    return {type: types.INCREMENT, payload}
+}
+
+function decrement (payload) {
+    return {type: types.DECREMENT, payload}
+}
+
+// let add = bindActionCreators(increment, store.dispatch)
+// let minus = bindActionCreators(decrement, store.dispatch)
+
+let actions = bindActionCreators({increment, decrement}, store.dispatch)
+
+export default class Counter extends Component {
+    state ={
+        number: store.getState().counter.number
+    }
     componentDidMount(){
-        
         this.unsubscribe = store.subscribe(()=>{
-            this.setState({number:store.getState().number});
-        });
+            this.setState({
+                number: store.getState().counter.number
+            })
+        })
     }
     componentWillUnmount(){
-        this.unsubscribe();
+        this.unsubscribe()
     }
-    render(){
+    render() {
         return(
-            <div>
+            <>
                 <p>{this.state.number}</p>
-                <button onClick={()=>actions.increment(2)}>+</button>
-                <button onClick={()=>actions.decrement(3) }>-</button>
-            </div>
+                <button onClick={()=>actions.increment(3)}>+</button>
+                <button onClick={()=>actions.decrement(1)}>-</button>
+            </>
         )
     }
 }

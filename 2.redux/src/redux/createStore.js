@@ -6,6 +6,7 @@ export default function createStore(reducer){
     }
     // action是有格式要求，第一个必须是一个纯对象 new Object {}  第二必须有一个type属性
     function dispatch(action){
+
         state = reducer(state,action);
         listeners.forEach(l=>l());
     }
