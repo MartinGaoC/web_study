@@ -1,9 +1,7 @@
-import createStore from './createStore';
-import bindActionCreators from './bindActionCreators';
-import combineReducers from './combineReducers';
+import createStore from './createStore.js'
+import bindActionCreators from './bindActionCreators.js'
 
 export {
-    createStore,
-    bindActionCreators,
-    combineReducers
+  createStore,
+  bindActionCreators
 }

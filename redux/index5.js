@@ -77,4 +77,3 @@ setTimeout(()=>{
   store.dispatch({type:UPDATA_CONTENT_TEXT,payload:'新内容'})
 },2000)
 
-//为了解决状态被任意改变的问题  引入了管理员的概念  现在规定不能直接操作appState 要想改状态必须通过 dispatch
