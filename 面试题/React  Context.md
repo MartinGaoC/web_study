@@ -1,0 +1,6 @@
+### React context 
+
+* 在React中，数据传递一般使用props传递数据，维持单向数据流，这样可以让组件之间的关系变得简单且可预测，但是单向数据流在某些场景中并不适用，如果希望适用跨层级的组件数据传递，这样就太繁琐了
+* Context提供了一种在组件之间共享此类值的方式，而不必显式的通过组件层层传递props
+* 可以要把context当作特定一个组件树内共享的store  使用例子有react-redux 中provider和connect的关系
+* 参照js的作用域链，React组件提供的context对象就好比提供给子组件访问的作用域，而context对象的熟悉可以看成作用域上的活动对象。由于组件的context由其父节点链上所有组件通过getChildContext（）返回的context对象组合而成，所以，组件通过context是可以访问到其父组件链上所有阶段组件提供的context属性
