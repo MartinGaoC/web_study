@@ -1,0 +1,8 @@
+# React怎么做数据的检查和变化
+
+* angular有脏检查机制，Vue通过Object.definePropotype来劫持对象的get，set方法，实现双向绑定
+* 当比较React而言，React是单向数据流动的UI渲染框架，本身不存在数据的检测这一机制。所有的数据改变都是通过setState来手动实现的
+* React本身不具有数据检查的功能，但是在遇到组件更新时会在shouldCommponentUpdate这个生命周期函数中进行数据检查相关操作
+* React响应数据的变化主要是通过生成新的虚拟dom，再将其映射为真实的dom树构建来生成新的页面
+* React的数据是不可变的，通过this.setState或者Hook的setState,生成新的数据而不会去做数据检查
+* 新生成的数据，生成新的虚拟dom，与旧的虚拟dom通过diff算法进行比较，然后确定需要更新的部分
