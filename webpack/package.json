@@ -24,5 +24,8 @@
     "webpack": "^4.36.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2"
+  },
+  "peerDependencies":{  // 插件必备  使用宿主项目的库
+
   }
 }
