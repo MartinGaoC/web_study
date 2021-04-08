@@ -1,3 +1,4 @@
+// 返回一个新的 Array Iterator对象 ，这个对象包括索引键值对
 let array = [{'age':1},{'name':2},{'lie':3}]
 let a = array.entries()
 console.log(a.next().value)

@@ -1,3 +1,5 @@
+ // 创建数组
+
 let array = {
     0:'name',
     1:'age',
