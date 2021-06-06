@@ -5,7 +5,7 @@ function fn(s){
       for(let j=i+1;j<=n;j++){
           let str = s.slice(i,j);
           let f = str.split('').reverse().join('');
-          ß
+          
           if(str == f){
               result = str.length > result.length ? str : result;
           }
