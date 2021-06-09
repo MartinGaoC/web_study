@@ -16,6 +16,10 @@ function fn(s){
   return result;
 }
 
+
+// slice
+
+
 fn('ababab')
 
 
