@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 let hookState = [] //存放所有状态的数组，一进来就调用了两次，所以是分别赋值
 let hookIndex = 0 // 索引
 function useState (initialState){
@@ -12,13 +13,10 @@ function useState (initialState){
   }
   return [hookState[hookIndex++], setState]
 }
-
-
 /**
- *  useMemo  useCallBack  作用 如果依赖值不变 那么就不去渲染
- * 
+ *  useMemo useCallback
+ * @returns 
  */
-
 let Child = ({data, addClick}) =>{
   console.log('child render')
   return(
@@ -27,22 +25,21 @@ let Child = ({data, addClick}) =>{
 }
 
 function memo (OldFunctionComponent) {
-  // 通过浅比较state和props 实现了 shouldComponentUpdate
+  // 用浅比较state和props的方式 实现了一个 shouldComponentUpdate
   return class extends React.PureComponent{
-    render(){
+    render() {
       return <OldFunctionComponent {...this.props}/>
     }
   }
 }
 
-Child = memo(Child);
+Child = memo(Child)
 
 
-
-let useMemo = (factory, dependencies) =>{
-  if(hookState[hookIndex]){ // 说明不是第一次渲染
+function useMemo (factory, dependencies) {
+  if(hookState[hookIndex]){ // 判断是否是第一次渲染？
     let [lastMemo, lastDependencies] = hookState[hookIndex]
-    let same = lastDependencies.every((item, index) => item === dependencies[index])
+    let same = dependencies.every((item, index) => item === lastDependencies[index])
     if(same){ // 没有变化
       hookIndex++
       return lastMemo
@@ -51,18 +48,17 @@ let useMemo = (factory, dependencies) =>{
       hookState[hookIndex++] = [newMemo, dependencies]
       return newMemo
     }
-  } else { // 第一次渲染
+  } else { // 是第一次渲染
     let newMemo = factory()
     hookState[hookIndex++] = [newMemo, dependencies]
     return newMemo
   }
 }
 
-
-let useCallback = (callback, dependencies) =>{
-  if(hookState[hookIndex]){ // 说明不是第一次渲染
+function useCallback (callback, dependencies) {
+  if(hookState[hookIndex]){ // 判断是否是第一次渲染？
     let [lastCallback, lastDependencies] = hookState[hookIndex]
-    let same = lastDependencies.every((item, index) => item === dependencies[index])
+    let same = dependencies.every((item, index) => item === lastDependencies[index])
     if(same){ // 没有变化
       hookIndex++
       return lastCallback
@@ -70,22 +66,18 @@ let useCallback = (callback, dependencies) =>{
       hookState[hookIndex++] = [callback, dependencies]
       return callback
     }
-  } else { // 第一次渲染
+  } else { // 是第一次渲染
     hookState[hookIndex++] = [callback, dependencies]
     return callback
   }
 }
-let App = () =>{
+
+const App = () =>{
   let [num, setNum] = useState(0)
   let [name, setName] = useState(0)
-
-
-  let data = useMemo(()=>({ num }), [num])
-
-  let addClick = useCallback(() => {
-    setNum(num+1)
-  }, [num])
-  return(
+  let data= useMemo(()=>({num}), [num])
+  let addClick = useCallback(()=>setNum(num+1), [num])
+  return (
     <div>
       <input value={name} onChange={(e)=>setName(e.target.value)}/>
       <Child data={data} addClick={addClick}/>
@@ -94,11 +86,9 @@ let App = () =>{
   )
 }
 
-function render (){
-  hookIndex = 0 // 每次调用都要重置 否则 就会无限增加
-  ReactDOM.render(
-    <App />,
-    document.getElementById('root')
-  );
+function render () {
+  hookIndex = 0
+  return ReactDOM.render(<App />, document.getElementById('root'));
 }
+
 render()
