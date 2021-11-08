@@ -1,3 +1,6 @@
+
+
+
 var arr = [9, 3, 1, 5, 4, 6, 2, 8, 7]
 function bubbleSort(arr) {
     for(var i = 0; i < arr.length-1;i++){
