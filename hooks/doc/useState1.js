@@ -4,10 +4,8 @@ let hookState = [] //存放所有状态的数组，一进来就调用了两次�
 let hookIndex = 0 // 索引
 function useState (initialState){
   hookState[hookIndex] = hookState[hookIndex] || initialState
-  console.log(hookState, 'hookState')
   let currentIndex = hookIndex  // 利用闭包的机制, 外层hook会多次渲染 但是我只改变我点击的值得
   function setState (newState){
-    console.log(currentIndex, 'currentIndex')
 
     hookState[currentIndex] = newState
     render()

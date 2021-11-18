@@ -2,6 +2,19 @@
 
 * 允许我们不编写类组件的情况下使用state
 
+## 1. React hooks
+
+* 允许我们不编写类组件的情况下使用state
+
+
+
+## 优点
+
+* 没有this的问题
+* 自定义hook 方便复用状态逻辑
+* 不像class 复杂的state逻辑
+
+
 ## 2.搭建项目
 
 * npx create-react-app my_hooks
@@ -91,6 +104,7 @@ render()
 ## 1.useMemo useCallback
 
 * useMemo 两个参数 第一个参数对象工厂， 第二个值是一个数组，依赖的变量
+* useMemo 两个参数 第一个参数 对象工厂， 第二个值是一个数组，依赖的变量
 * useCallback 两个参数 第一个参数是个函数， 第二个值是一个数组，依赖的变量
 
 
@@ -109,3 +123,7 @@ render()
 
 * 没有this的问题
 * 自定义hook 方便复用状态逻辑
+* 两个 参数  一个纯函数组件 第二个对比props是否刷新
+* 和useMemo没有一点关系
+* React.memo 浅比较，每次渲染都会生产一个新的对象
+
