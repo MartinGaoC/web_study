@@ -1,13 +1,3 @@
-function fun(arg1, arg2){
-    console.log(this)
-    console.log(this.name);
-    console.log(arg1+ arg2)
-}
-
-let _demo = {name: 'YIYang'}
-
-fun.call(_demo, 1, 2)
-// this指向从函数 到对象
 
 /**
  * 自定义实现call
@@ -16,6 +6,7 @@ fun.call(_demo, 1, 2)
  */
 
 Function.prototype.ownCall = function (context, ...args){
+    console.log(context,'context')
     context= ( typeof context === 'object' ? context : window)
     // 防止覆盖原有的属性
     const key = Symbol()
@@ -26,3 +17,29 @@ Function.prototype.ownCall = function (context, ...args){
     delete context[key]
     return result
 }
+
+
+Function.prototype.mycall = function (context, ...ags){
+    context = typeof context === 'object' ? context : window
+    const key = Symbol()
+    context[key] = this
+    const result = context[key](...args)
+    delete context[key]
+    return reslut
+}
+
+
+
+
+function fn (){
+    this.name = 1
+
+}
+
+function fn2(){
+  fn.call(this)
+  console.log(this.name)
+}
+
+ fn2()
+

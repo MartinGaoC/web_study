@@ -12,7 +12,7 @@
 ```
 function.call(obj,[params1])
 ```
-* calld的使用场景，举个例子
+* call的使用场景，举个例子
 ```
 function a (){
     this.a = 1;
@@ -47,3 +47,4 @@ let _demo = {name: 'YIYang'}
 fun.call(_demo, 1, 2)
 // this指向从函数 到对象
 ```
+
