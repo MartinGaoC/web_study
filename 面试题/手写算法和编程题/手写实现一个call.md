@@ -47,3 +47,5 @@ let _demo = {name: 'YIYang'}
 fun.call(_demo, 1, 2)
 // this指向从函数 到对象
 ```
+
+* 自定义实现 call
