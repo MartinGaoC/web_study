@@ -45,3 +45,38 @@ youxi[langrensha[0]]()
 const langrensha1 = Reflect.ownKeys(youxi);  // 抽取对象中所有属性 返回一个数组
 console.log(langrensha1);
 youxi[langrensha1[2]]()
+
+
+
+//  Symbol的内置对象
+
+
+// 自定义检测类型
+
+class Parse {
+    static [Symbol.hasInstance](params){
+        console.log(params)
+        console.log('用来检测类型')
+        return true  // 控制返回值
+    }
+}
+
+let o = {}
+
+console.log(o instanceof Parse)
+// instanceof 运算符检测构造函数的prototype属性是否出现在某个对象上
+
+
+let ar = [1,2,3]
+let ar1 = [4,5,6]
+
+ar1[Symbol.isConcatSpreadable] = false;  // 控制数组是否允许展开
+
+console.log(ar.concat(ar1))
+
+
+
+
+
+
+
