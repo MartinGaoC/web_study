@@ -35,3 +35,41 @@ console.log(xiyou)
 // 接下来不断调用next方法，指针一直向后移动
 // 每调用一次next方法 返回一个 value和done属性的对象。
 // 需要自定义遍历数据的时候 想到要使用迭代器。
+
+
+
+
+// 手写一个迭代器, 来达到遍历对象的目的
+// 面向对象思想封装
+
+const banji = {
+    name: '一班',
+    stus: [
+        'UZI',
+        'TheShy',
+        'kinght',
+        'xiaotian'
+    ],
+    [Symbol.iterator]() {
+        let index = 0; // 索引变量
+        
+        return {
+            next:  () => {
+                if(index < this.stus.length){
+                    const result =  { value: this.stus[index], done: false }
+                    index++
+                    return result
+                } else {
+                    return {
+                        value: undefined,
+                        done: true
+                    }
+                }
+            }
+        }
+    }
+}
+
+for(let i of banji){
+    console.log(i)
+}
