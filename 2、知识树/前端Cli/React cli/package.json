@@ -95,7 +95,7 @@
       "react-router-dom": "5.2.0",
       "regenerator-runtime": "0.13.7",
       "sanitize.css": "12.0.1",
-      "sharp": "^0.29.2",
+      "sharp": "^0.29.2", // sharp包  node.js图像处理模块 next源码中有使用，显性安装时为了控制版本
       "skywalking-backend-js": "0.1.0",
       "stylus": "0.54.7",
       "swiper": "4.4.6",
