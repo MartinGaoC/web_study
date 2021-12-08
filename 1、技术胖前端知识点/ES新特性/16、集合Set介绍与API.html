@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set</title>
+</head>
+<body>
+    <script>
+
+       // ES6提供了新的数据结构Set。类似于数组，但成员的值都是唯一的
+       // 集合实现了iterator接口，所以可以使用扩展运算符和for...of进行遍历
+
+       let sets = new Set(['你','我','他','你'])
+
+       console.log(sets.size)  // 类似数组的长度
+       console.log(sets.add('who'))  
+       console.log(sets.delete('他'))
+       console.log(sets.has('who')) // 检测是否具有某个值
+       console.log(sets)
+
+       for(let v of sets){
+           console.log(v)   // 实现了迭代器iterator
+       }
+    </script>
+</body>
+</html>
