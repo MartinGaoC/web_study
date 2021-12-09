@@ -44,7 +44,7 @@ var e = React.createElement("div",{id: "root"}, ReactElement("h1", {className: "
 # Diffling算法描述
 
 * 同一类型的元素
-* 保留此Dom节点，仅对比和更新有改拜年的属性  比如 className title
+* 保留此Dom节点，仅对比和更新有改变的属性  比如 className title
 * 对于style属性，React会继续对比，仅更新有改变的属性，茹color
 
 * 同一类型的组件
