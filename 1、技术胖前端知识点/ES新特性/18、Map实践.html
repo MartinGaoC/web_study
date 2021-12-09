@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+</head>
+<body>
+    <script>
+       // Map 数据结构，类似于对象，也是键值对的集合，但是键的范围不限于字符串，包括对象等都可以作为键。Map也实现了迭代器
+       // iterator接口，可以使用扩展运算符和for of 方法
+
+       let m = new Map()
+       m.set('name', 1)
+       let key = {
+           age: 18
+       }
+
+       m.set(key, ['大', '圆'])
+
+       for(let v of m){
+           console.log(v)
+       }
+
+       m.delete(key)
+       console.log(m)
+
+       console.log(m.size)
+
+
+    </script>
+</body>
+</html>
