@@ -5,6 +5,7 @@
 let qicheren = ['擎天柱', '大黄蜂']
 let batianhu = ['威震天', '路障']
 
+
 console.log(qicheren.concat(batianhu))  // es5 方式
 
 console.log([...qicheren,...batianhu]) // 扩展运算符方式
