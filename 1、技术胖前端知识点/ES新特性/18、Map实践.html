@@ -12,7 +12,7 @@
        // iterator接口，可以使用扩展运算符和for of 方法
 
        let m = new Map()
-       m.set('name', 1)
+       m.set('name', 1) // 添加
        let key = {
            age: 18
        }
@@ -23,12 +23,16 @@
            console.log(v)
        }
 
-       m.delete(key)
+       m.delete(key) // 删除
        console.log(m)
 
-       console.log(m.size)
+       console.log(m.size)  // 值
 
+       console.log(m.get(key)) // 获取
 
+       m.clear()
+
+       // map 为升级版本的对象
     </script>
 </body>
 </html>

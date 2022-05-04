@@ -5,7 +5,7 @@ let s2 = Symbol('1')
 let s3 = Symbol('1')
 console.log(s, typeof s) 
 console.log(s2 === s3)   // 这种形式创建 值只是一个标识，和自己不相等
-let s4 = Symbol.for('2');
+let s4 = Symbol.for('2');  // 函数对象
 let s5 = Symbol.for('2');
 console.log(s4 === s5)   // 通过.for创建，两者相等。
 
