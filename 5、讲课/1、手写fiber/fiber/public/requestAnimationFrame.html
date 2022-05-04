@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="background-color: blue; width: 0; height: 20px;"></div>
+    <button>开始</button>
+    <script>
+        let dom = document.querySelector('div');
+        let button = document.querySelector('button');
+        let startTime;
+        function progess () {
+            dom.style.width = dom.offsetWidth + 1 + 'px';
+            dom.innerHTML = dom.offsetWidth + '%'
+            console.log(Date.now()-startTime+'ms')
+            startTime = Date.now();
+            if(dom.offsetWidth < 100){
+                requestAnimationFrame(progess)
+            }
+        }
+        button.onclick = function () {
+            startTime = Date.now()
+            requestAnimationFrame(progess)
+        }
+    </script>
+</body>
+</html>
