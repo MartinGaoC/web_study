@@ -10,22 +10,24 @@
     <div style="background-color: blue; width: 0; height: 20px;"></div>
     <button>开始</button>
     <script>
-        let dom = document.querySelector('div');
-        let button = document.querySelector('button');
-        let startTime;
-        function progess () {
-            dom.style.width = dom.offsetWidth + 1 + 'px';
-            dom.innerHTML = dom.offsetWidth + '%'
-            console.log(Date.now()-startTime+'ms')
-            startTime = Date.now();
-            if(dom.offsetWidth < 100){
-                requestAnimationFrame(progess)
+        let div = document.querySelector('div');
+        let but = document.querySelector('button');
+        let start;
+
+        function progress () {
+            div.style.width = div.offsetWidth + 1 + 'px';
+            div.innerHTML = div.offsetWidth + '%'
+            if(div.offsetWidth < 100){
+                console.log(Date.now()-start+'ms')
+                start=Date.now()
+                requestAnimationFrame(progress)
             }
         }
-        button.onclick = function () {
-            startTime = Date.now()
-            requestAnimationFrame(progess)
+        but.onclick = function () {
+            start = Date.now()
+            requestAnimationFrame(progress)
         }
+
     </script>
 </body>
 </html>
