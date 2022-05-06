@@ -23,7 +23,28 @@
 
         // performance.now() 页面渲染之后到现在的时间
 
+        let channel = new MessageChannel();
+        let activeFrameTime = 1000/60 // 16.6 每帧的时间
+        let frameDeadline; // 这一帧的截止时间
+        let pendingCallback;
+        let timeRemaining = ()=> frameDeadline - performance.now()
+        channel.port2.onmessage = function(){
+            let currentTime = performance.now(); // 获取从渲染到现在为止的时间
 
+            let didTimeout = frameDeadline <= currentTime;
+            if(didTimeout || timeRemaining() > 0){
+                if(pendingCallback) pendingCallback({didTimeout, timeRemaining})
+            }
+        }
+        window.requestIdleCallbacks = (callback, options) => {
+            requestAnimationFrame((rafTime)=>{ // refTime 当前动画帧开始的时间
+                console.log(rafTime, 'rafTime')
+                // 用每帧开始的时间 + 每帧的时间 = 这帧的截止时间
+                frameDeadline = rafTime + activeFrameTime;
+                pendingCallback = callback;
+                channel.port1.postMessage('hello')
+            }) 
+        }
          // 深度遍历优先
          const works = [
             ()=>{
@@ -62,7 +83,7 @@
             }
         ]
 
-        requestIdleCallback(workLoop)
+        requestIdleCallbacks(workLoop)
 
         function workLoop(deadline){
            // deadline 是一个函数，返回本帧还剩余多少时间
@@ -72,7 +93,7 @@
                 performUnitOfWork(); 
            }
            if(works.length > 0){
-            requestIdleCallback(workLoop)
+            requestIdleCallbacks(workLoop)
            }
         }
 

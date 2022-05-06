@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-let element = (
+const element = (
   <div id="A1">
     <div id="B1">
       <div id="C1"></div>
-      <div id="C2"></div>
+      <div id="C1"></div>
     </div>
     <div id="B2"></div>
+
   </div>
 )
 
-let elements = {
+const elements = {
   "type": "div",
   "props": {
     "id": "A1",
@@ -23,16 +24,14 @@ let elements = {
           "children": [
             {
               "type": "div",
-
               "props": {
                 "id": "C1"
               }
             },
             {
               "type": "div",
-
               "props": {
-                "id": "C2"
+                "id": "C1"
               }
             }
           ]
@@ -45,29 +44,26 @@ let elements = {
         }
       }
     ]
-  },
-  "_owner": null,
-  "_store": {}
+  }
 }
-
-// 不能暂停，耗费资源
-// 层级过深容易造成卡顿
-
-render(element, document.getElementById('root'))
+console.log(JSON.stringify(element, null, 2))
 
 function render (element, parentDOM) {
-  // 创建真实DOM
+  // 创建一个真实的dom元素
   let dom = document.createElement(element.type)
 
   Object.keys(element.props)
-  .filter((key) => key!=='children')
-  .forEach(item=> dom[item] = element.props[item])
+  .filter(item => item !== 'children')
+  .forEach(key => dom[key] = element.props[key])
 
   if(Array.isArray(element.props.children)){
     element.props.children.forEach((item)=>{
-      render(item, dom)
+      render(item, dom) // 递归获取
     })
   }
 
   parentDOM.appendChild(dom)
 }
+
+
+render(element, document.getElementById('root'));
