@@ -8,12 +8,10 @@
 </head>
 <body>
     <script>
-        // 1、演示一下这个函数怎么用
-        function sleep(duration){
+        // 1、sleep函数
+        function sleep(duration){ // 1000
             let start = Date.now();
-            while(start + duration > Date.now()){
-
-            }
+            while(start + duration > Date.now()){} // 注释：当前时间+传进来的时间  是不是卡死在这里了
         }
 
         // function progress () {
@@ -22,11 +20,11 @@
         // }
         // requestAnimationFrame(progress)
 
-        //  2、深度优先遍历，先往下走
+        //  2、深度优先遍历，分成五个子任务
         const works = [
             ()=>{
                 console.log('A1开始')
-                sleep(20)
+                sleep(20)   // 注释： 我们现在模拟一下睡眠，如果第一个任务执行就要用20ms
                 console.log('A1结束')
 
             },
@@ -58,16 +56,22 @@
             }
         ]
         // 9、timeout参数，告诉浏览器，可以在空闲时执行任务，但是超过我这个时间限制，不管有没有空 都要执行我的函数
-        requestIdleCallback(workLoop,{timeout: 1000});
+        
 
-        // 3、循环执行工具
+        // 注释： 那么我们该使用一下这个API了对吧
+        
+        requestIdleCallback(workLoop,{timeout: 1000}); // 过期时间
+
+        // 3、循环执行回调参数
+        // 注释： 它会循环执行工作，我们在写哪一块呢 看图说话
         function workLoop (deadline) { 
-            // 4、deadline 时间到了你得还回来
-            // 5、如果说还有剩余时间 并且还有没完成的任务
+            // 4、如果说还有剩余时间 并且还有没完成的任务
+            // 注释：看mdn API，这个时间就是告诉你这帧还剩余多少时间
             console.log(`本帧的剩余时间，${deadline.timeRemaining()}ms`)
-            while(deadline.timeRemaining() > 0 && works.length > 0){ 
+            while((deadline.timeRemaining() > 0 || deadline.didTimeout) && works.length > 0){ 
                 // 7、第一个任务执行就花了超过20ms，延误浏览器执行下一帧，
                 //   然后还能再进来吗 进不来了，不满足deadline的剩余时间了
+                // 注释： 执行工作单元
                 performUnitOfWork();
             }
             if(works.length > 0){ // 8、如果还有任务要执行，继续下次调度
@@ -78,8 +82,8 @@
         }
 
         function performUnitOfWork () {
-            let work = works.shift()// 6、取出工作数组中的第一个工作
-            work();
+            let work = works.shift()// 6、取出工作数组中的第一个工作单元并执行
+            work();         // 注释：执行完第一个任务之后，回到循环，第一次的五个任务需要的时间很短，所以一次执行完毕
         } 
         // 解释为什么最后剩下49ms
         // requestIdleCallback 的执行有两种可能性
