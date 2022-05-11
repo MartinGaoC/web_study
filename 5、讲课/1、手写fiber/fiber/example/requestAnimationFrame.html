@@ -17,7 +17,7 @@
             div.style.width = div.offsetWidth+1+'px'; // 每执行一次 就让宽度加一个像素
             div.innerHTML = div.offsetWidth+'%'; // 修改文本 方便查看
             if(div.offsetWidth<100){
-                console.log(Date.now()-startTime+"ms") // 当前的时间减去刚才的时间
+                console.log(Date.now()-startTime+"ms") // 当前的时间减去刚才的时间 是不是每帧平均下来都是16.6ms
                 startTime = Date.now(); // 重置开始时间
                 requestAnimationFrame(progress)
             }
