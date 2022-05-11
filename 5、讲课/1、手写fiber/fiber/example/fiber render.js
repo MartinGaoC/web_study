@@ -16,7 +16,7 @@ let nextUnitOfWork = {
 
 function workLoop (deadline) { // 2、 工作循环
   // 5、如果有当前的工作单元，就执行它，返回下一个工作单元
-  while(nextUnitOfWork && deadline.timeRemaining() > 0){ //注释：新增判断deadline
+  while(nextUnitOfWork && deadline.timeRemaing() > 0){ //注释：新增判断deadline
     nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
   }
 }

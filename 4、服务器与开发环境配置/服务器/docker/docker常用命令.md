@@ -11,3 +11,5 @@
 * 删除容器 docker rm 容器名
 * 进入容器 docker attach 容器名
 * 进入一个正在运行中的容器 docker container exec -it 容器名/bin/sh
+
+* 查询docker容器版本 cat /etc/issue
