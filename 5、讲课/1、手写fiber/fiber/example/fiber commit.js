@@ -26,21 +26,25 @@ function workLoop(){
 }
 
 function commitRoot () {
-  let currentFiber = workInProgressRoot.firstEffect;
+  let currentFiber = workInProgressRoot.firstEffect; // C1 
   while(currentFiber){
 
     if(currentFiber.effectTag === PLACEMENT){
       console.log('commitRoot',currentFiber.return.stateNode)
       console.log('currentFiber.stateNode',currentFiber.stateNode)
 
-      currentFiber.return.stateNode.appendChild(currentFiber.stateNode)
+      currentFiber.return.stateNode.appendChild(currentFiber.stateNode) // 吧自己挂载到父节点上
     } 
     currentFiber = currentFiber.nextEffect;
   }
   workInProgressRoot = null;
 }
 
-
+/**
+ * 9
+ * beginWork 1、创建此fiber的真实DOM 2、通过虚拟DOM创建fiber结构 3、不处理挂载dom的逻辑
+ * @param {*} workingInProgressFiber 
+ */
 function performUnitOfWork (workingInProgressFiber) { // workingInProgressFiber 正在工作中的fiber节点
   beginWork(workingInProgressFiber) // 创建真实DOM  创建fiber子节点， 不进行挂载
 
@@ -74,7 +78,7 @@ function beginWork (workingInProgressFiber){
 
   // 创建子fiber
   let perviousFiber;
-
+// child是一个虚拟DOM的数组
   if(Array.isArray(workingInProgressFiber.props.children)){
     workingInProgressFiber.props.children.forEach((child, index) =>{
       let childFiber ={
@@ -86,7 +90,7 @@ function beginWork (workingInProgressFiber){
       }
   
       if(index === 0) {
-        workingInProgressFiber.child = childFiber // 让父节点的child指向儿子
+        workingInProgressFiber.child = childFiber // 让父节点的child指向第一个子节点
       } else {
         perviousFiber.sibling = childFiber;
       }
@@ -107,26 +111,34 @@ function completeUnitOfWork (workingInProgressFiber) {
 
   let returnFiber = workingInProgressFiber.return; // A1
   if(returnFiber){ // 把子的副作用和自己的副作用都归到自己身上
+    // firstEffect 指向第一个有副作用的子节点
+    // lastEffect  指向最后一个有副作用的子节点
+    // 单向链表结构，中间的节点通过next连接
+    // 副作用： 这个节点有删除 插入 更新 获取数据或者dom操作
+    // 子节点归并到上级
+    // 根上就会出现一个副作用链条
+
+
     // 把当前fiber的有副作用子链表挂载到父亲身上
-    if(!returnFiber.firstEffect){
+    if(!returnFiber.firstEffect){ // 如果firstEffect没有值， 就把自己的第一个节点归并到父节点上
       returnFiber.firstEffect = workingInProgressFiber.firstEffect
     }
-    if(workingInProgressFiber.lastEffect){
+    if(workingInProgressFiber.lastEffect){ 
       if(returnFiber.lastEffect){
         returnFiber.lastEffect.nextEffect = workingInProgressFiber.firstEffect
       }
       returnFiber.lastEffect = workingInProgressFiber.lastEffect;
     }
 
-    // 再把自己挂到后边
 
-    if(workingInProgressFiber.effectTag){
+    // 再把自己挂到最后边
+    if(workingInProgressFiber.effectTag){ // 判断一下当前是否有操作
       if(returnFiber.lastEffect){
-        returnFiber.lastEffect.nextEffect = workingInProgressFiber;
+        returnFiber.lastEffect.nextEffect = workingInProgressFiber; // 往尾部压
       } else {
-        returnFiber.firstEffect = workingInProgressFiber
+        returnFiber.firstEffect = workingInProgressFiber 
       }
-      returnFiber.lastEffect = workingInProgressFiber;
+      returnFiber.lastEffect = workingInProgressFiber; // 指向自己本身
     }
 
 
