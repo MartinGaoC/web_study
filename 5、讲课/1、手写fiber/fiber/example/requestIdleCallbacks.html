@@ -24,13 +24,14 @@
         // performance.now() 页面渲染之后到现在的时间
 
         let channel = new MessageChannel();
-        let activeFrameTime = 1000/60 // 16.6 每帧的时间
+        let activeFrameTime = 1000/60 // 16.6 每帧的时间 先写死
         let frameDeadline; // 这一帧的截止时间
         let pendingCallback;
         let timeRemaining = ()=> frameDeadline - performance.now()
+        // 注释 浏览器空闲的时候 就执行它
         channel.port2.onmessage = function(){
             let currentTime = performance.now(); // 获取从渲染到现在为止的时间
-            // 如果帧的截止时间已经小于当前时间，说明已经过去了
+            // 如果帧的截止时间已经小于当前时间，说明已经过去了，这时候就在模拟计算didTimeout
             let didTimeout = frameDeadline <= currentTime;
             if(didTimeout || timeRemaining() > 0){
                 if(pendingCallback) pendingCallback({didTimeout, timeRemaining})
@@ -39,10 +40,10 @@
         window.requestIdleCallbacks = (callback, options) => {
             requestAnimationFrame((rafTime)=>{ // refTime 当前动画帧开始的时间
                 console.log(rafTime, 'rafTime')
-                // 用每帧开始的时间 + 每帧的时间 = 这帧的截止时间
+                //这帧的截止时间 =  用每帧开始的时间 + 每帧的时间
                 frameDeadline = rafTime + activeFrameTime;
                 pendingCallback = callback;
-                // 发消息之前，相当于添加一个宏任务
+                // 发消息之后，相当于添加一个宏任务，然后等待执行
                 channel.port1.postMessage('hello')
             }) 
         }

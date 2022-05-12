@@ -11,20 +11,22 @@
     <button>开始</button>
     <script>
         let div = document.querySelector('div');
-        let but = document.querySelector('button');
-        let start;
-
+        let button = document.querySelector('button');
+        let startTime
         function progress () {
-            div.style.width = div.offsetWidth + 1 + 'px';
+            div.style.width = div.offsetWidth + 1 + 'px'
             div.innerHTML = div.offsetWidth + '%'
             if(div.offsetWidth < 100){
-                console.log(Date.now()-start+'ms')
-                start=Date.now()
+                console.log(Date.now() - startTime+ 'ms') // 当前时间减去刚开始的时间，等于每一帧的时间
+                startTime = Date.now()
                 requestAnimationFrame(progress)
+
             }
         }
-        but.onclick = function () {
-            start = Date.now()
+
+        button.onclick = function () {
+            div.style.width = 0;
+            startTime = Date().now
             requestAnimationFrame(progress)
         }
 
