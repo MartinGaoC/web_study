@@ -1,5 +1,6 @@
 import element from './element'
 
+// 注释：目的， 把虚拟dom通过fiber的方式渲染到跟节点里
 let container = document.getElementById('root'); // 1、把虚拟dom渲染道真实dom里
 const PLACEMENT = 'PLACEMENT'
 
