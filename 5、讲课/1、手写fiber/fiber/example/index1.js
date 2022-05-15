@@ -68,8 +68,8 @@ let element = (
 
 // 打印一下看看
 // console.log(JSON.stringify(element, null, 2))
-// 如果节点多，层级特别深，无法中途暂停，会引起卡顿 
-// 因为JS是单线程，而且UI渲染和JS执行是互斥的
+// 1、如果节点很多，层级较深，这个遍历的过程无法中断，可能导致卡顿
+// 2、JS是单线程，渲染线程和JS线程是互斥的。这种方式明显不够优化
 
 
 function render (

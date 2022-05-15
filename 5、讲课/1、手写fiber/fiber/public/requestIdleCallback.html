@@ -8,52 +8,108 @@
 </head>
 <body>
     <script>
-        function sleep (duration) {
-            let start = Date.now(); // 当前时间
-            while(start + duration > Date.now()){} // 当前时间 + 睡眠时间 >  当前时间  循环
+
+        function sleep(duration){
+            let start = Date.now()
+            while(start + duration > Date.now()){}
         }
-        // 深度优先
-        const works = [
+        function progeress() {
+            
+            requestAnimationFrame(progeress)
+
+        }
+
+        // requestAnimationFrame(progeress)
+        // 深度优先遍历
+        let works = [
             ()=>{
                 console.log('A1开始')
                 sleep(20)
                 console.log('A1结束')
-
-            },()=>{
+            },
+            ()=>{
                 console.log('B1开始')
-                console.log('B1结束')
-
-            },()=>{
+                sleep(20)
+                console.log('B1结束') 
+            },
+            ()=>{
                 console.log('C1开始')
-                console.log('C1结束')
+                sleep(20)
 
-            },()=>{
+                console.log('C1结束') 
+            },
+            ()=>{
                 console.log('C2开始')
-                console.log('C2结束')
+                sleep(20)
 
-            },()=>{
+                console.log('C2结束') 
+            },
+            ()=>{
                 console.log('B2开始')
-                console.log('B2结束')
+                sleep(20)
+
+                console.log('B2结束') 
             }
         ]
 
+        let channel = new MessageChannel();
+        let frameDeadline;
+        let activeFrameTime = 1000/60;  // 每帧的时间
+        let pendingCallback;
+        let timeRemaining = () => frameDeadline - performance.now()
 
-        requestIdleCallback(workloop)
+        // 浏览器空闲的时候就执行
+        channel.port2.onmessage = function() {
+            let currentTime = performance.now(); // 获取从渲染到现在为止的时间
 
-        function workloop(deadline){
-            console.log(`本帧当前剩余${deadline.timeRemaining()}ms`)
-            // 循环判断剩下的时间是否还够执行
-            while(deadline.timeRemaining() > 0 && works.length > 0){ // 判断  如果当前帧还有剩余时间 + 还有任务没完成
-                performUnitOfWork() // 执行工作单元
+            //  过期时间 
+            //  如果帧的截止时间已经小于当前时间，说明已经过去了
+            let didTimeout = frameDeadline <= currentTime;
+          
+            if(didTimeout || timeRemaining() > 0){
+                if(pendingCallback) pendingCallback({didTimeout, timeRemaining})
             }
+
+        }
+
+        window.requestIdleCallbacks = (callback, options) =>{
+            requestAnimationFrame((rafTime)=>{ // rafTime 当前动画帧开始的时间
+                // 本帧的截止时间 = 当前动画帧开始的时间 + 本帧所需的时间
+                frameDeadline = rafTime + activeFrameTime;
+                pendingCallback = callback;
+
+                // 发消息之后，相当于添加了一个宏任务，等待执行
+                channel.port1.postMessage('hello')
+            })
+        }
+
+
+        function workLoop (deadline) { //  工作循环
+            console.log(`本帧的剩余时间${deadline.timeRemaining()}ms`)
+            while(deadline.timeRemaining()>0 && works.length > 0){
+                perFormUnitOfWork() // 执行工作单元
+            }
+
             if(works.length > 0){
-                requestIdleCallback(workloop)
+                requestIdleCallbacks(workLoop) // 如果我的任务队列里还有任务没有完成，继续调度
+
             }
         }
-        function performUnitOfWork() {
-            works.shift()()
-        }
 
+        function perFormUnitOfWork() {
+            // 取出任务队列里的第一个工作单元并执行
+            works.shift()() // 执行完第一个任务之后，回到循环
+        }
+        requestIdleCallbacks(workLoop)
+
+
+        // 解释一下为什么最后剩下50ms
+        // requestIdleCallback 的执行有两种可能
+        // 浏览器如果长时间都有重要的工作要做，那么requestIdleCallback的时间就会延长
+        // 如果浏览器无事可做，是不是
+        // 50ms 是怎么来的
+        // 是因为人类对100ms以内的响应 人眼就感觉是流畅的
+        // 100/2
     </script>
 </body>
 </html>

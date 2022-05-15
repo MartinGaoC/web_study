@@ -1,137 +1,81 @@
-import elements from './element.js'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 
-// 目的： 把虚拟DOM渲染到根节点中
-let container = document.getElementById('root');
-const PLACEMENT = 'PLACEMENT';
-
-// 下一个工作单元
-// fiber对象其实也是一个普通的JS对象
-
-let workInProgressRoot  = {
-  stateNode: container, //  静态节点，fiber的真实DOM
-  props: {children: [elements]}, // fiber的属性
-};
-let nextUnitOfWork = workInProgressRoot;
 
 
-function workLoop(){
-  while(nextUnitOfWork){ // 下一个工作单元
-    nextUnitOfWork = performUnitOfWork(nextUnitOfWork) // 返回下一个工作单元
-  }
-  if(!nextUnitOfWork){
-    commitRoot()
-  }
-  
-}
 
-function commitRoot () {
-  let currentFiber = workInProgressRoot.firstEffect;
-  while(currentFiber){
+let element = (
+    <div id="A1">
+        <div id="B1">
+            <div id="C1"></div>
+            <div id="C2"></div>
 
-    if(currentFiber.effectTag === PLACEMENT){
-      console.log('commitRoot',currentFiber.return.stateNode)
-      console.log('currentFiber.stateNode',currentFiber.stateNode)
+        </div>
+        <div id="B2"></div>
 
-      currentFiber.return.stateNode.appendChild(currentFiber.stateNode)
-    } 
-    currentFiber = currentFiber.nextEffect;
-  }
-  workInProgressRoot = null;
-}
+    </div>
+)
 
-
-function performUnitOfWork (workingInProgressFiber) { // workingInProgressFiber 正在工作中的fiber节点
-  beginWork(workingInProgressFiber) // 创建真实DOM  创建fiber子节点， 不进行挂载
-
-  if(workingInProgressFiber.child){ // 如果有子节点就返回
-    return workingInProgressFiber.child
-  }
-
-  while(workingInProgressFiber){
-    completeUnitOfWork(workingInProgressFiber)
-    if(workingInProgressFiber.sibling){  // 如果有兄弟节点就返回
-      return workingInProgressFiber.sibling
-    }
-
-    workingInProgressFiber = workingInProgressFiber.return // 如果都没有 指向父节点 重新寻找
-  }
-
-
-}
-
-function beginWork (workingInProgressFiber){
-  console.log('beginWork', workingInProgressFiber.props.id)
-  // 创建真实DOM
-  if(!workingInProgressFiber.stateNode){
-    workingInProgressFiber.stateNode = document.createElement(workingInProgressFiber.type)
-    for(let key in workingInProgressFiber.props){
-      if(key !== 'children'){
-        workingInProgressFiber.stateNode[key] = workingInProgressFiber.props[key];
-      }
+let elementDOM = {
+    "type": "div",
+    "props": {
+      "id": "A1",
+      "children": [
+        {
+          "type": "div",
+          "props": {
+            "id": "B1",
+            "children": [
+              {
+                "type": "div",
+           
+                "props": {
+                  "id": "C1"
+                }
+              },
+              {
+                "type": "div",
+                "props": {
+                  "id": "C2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "div",
+     
+          "props": {
+            "id": "B2"
+          }
+        }
+      ]
     }
   }
 
-  // 创建子fiber
-  let perviousFiber;
+  // 1、如果层级特别多，特别深，无法暂停。可能会导致页面的卡顿
+  // 2、JS单线程，渲染和JS是互斥的，
+function render(
+    element, // 虚拟DOM
+    parentDom // 真实DOM
+){
+    // 创建DOM元素
+    let dom = document.createElement(element.type)
 
-  if(Array.isArray(workingInProgressFiber.props.children)){
-    workingInProgressFiber.props.children.forEach((child, index) =>{
-      let childFiber ={
-        type: child.type,
-        props: child.props,
-        return: workingInProgressFiber, // 
-        effectTag: PLACEMENT, // 副作用标记，表示这个节点要进行什么操作
-        nextEffect: null  // 下一个有副作用的节点
-      }
-  
-      if(index === 0) {
-        workingInProgressFiber.child = childFiber // 让父节点的child指向儿子
-      } else {
-        perviousFiber.sibling = childFiber;
-      }
-  
-      perviousFiber = childFiber
-  
-  
+    Object.keys(element.props)
+    .filter(item=> item !== 'children')
+    .forEach(key=>{
+        dom[key] = element.props[key] // 属性挂载
     })
-  }
 
-
-} 
-
-function completeUnitOfWork (workingInProgressFiber) {
-  console.log('completeUnitOfWork', workingInProgressFiber.props.id)
-
-  // 构建副作用链，effectList，只有那些有副作用的节点
-
-  let returnFiber = workingInProgressFiber.return; // A1
-  if(returnFiber){ // 把子的副作用和自己的副作用都归到自己身上
-    // 把当前fiber的有副作用子链表挂载到父亲身上
-    if(!returnFiber.firstEffect){
-      returnFiber.firstEffect = workingInProgressFiber.firstEffect
+    if(Array.isArray(element.props.children)){
+        element.props.children.forEach(child=>{
+            console.log(JSON.stringify(child, null, 2), 'child')
+            render(child, dom)
+        })
     }
-    if(workingInProgressFiber.lastEffect){
-      if(returnFiber.lastEffect){
-        returnFiber.lastEffect.nextEffect = workingInProgressFiber.firstEffect
-      }
-      returnFiber.lastEffect = workingInProgressFiber.lastEffect;
-    }
-
-    // 再把自己挂到后边
-
-    if(workingInProgressFiber.effectTag){
-      if(returnFiber.lastEffect){
-        returnFiber.lastEffect.nextEffect = workingInProgressFiber;
-      } else {
-        returnFiber.firstEffect = workingInProgressFiber
-      }
-      returnFiber.lastEffect = workingInProgressFiber;
-    }
-
-
-  }
+    parentDom.appendChild(dom)
 
 }
-// 告诉浏览器在每帧的空余时间调用工作循环
-requestIdleCallback(workLoop)
+render(element, document.getElementById('root'))

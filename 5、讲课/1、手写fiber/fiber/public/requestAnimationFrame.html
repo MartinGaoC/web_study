@@ -4,32 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>RequestAnimationFrame</title>
 </head>
 <body>
-    <div style="background-color: blue; width: 0; height: 20px;"></div>
+    <div style="background-color:blue; width: 0; height: 20px;"></div>
     <button>开始</button>
     <script>
         let div = document.querySelector('div');
         let button = document.querySelector('button');
-        let startTime
-        function progress () {
-            div.style.width = div.offsetWidth + 1 + 'px'
-            div.innerHTML = div.offsetWidth + '%'
-            if(div.offsetWidth < 100){
-                console.log(Date.now() - startTime+ 'ms') // 当前时间减去刚开始的时间，等于每一帧的时间
-                startTime = Date.now()
+        let startTime;
+        function progress (rafTime) {
+            // console.log(rafTime)  // 当前动画帧开始的时间
+            div.style.width = div.offsetWidth+1+'px'; // 每执行一次 就让宽度加一个像素
+            div.innerHTML = div.offsetWidth+'%'; // 修改文本 方便查看
+            if(div.offsetWidth<100){
+                console.log(Date.now()-startTime+"ms") // 当前的时间减去刚才的时间
+                startTime = Date.now(); // 重置开始时间
                 requestAnimationFrame(progress)
-
             }
         }
-
-        button.onclick = function () {
+        button.onclick = function(){
             div.style.width = 0;
-            startTime = Date().now
-            requestAnimationFrame(progress)
+            startTime = Date.now();
+            // 浏览器会在每一帧渲染前执行progress
+            requestAnimationFrame(progress);
         }
 
+        // 点击按钮，调用动作帧函数， 每次让宽度+1，看看宽度是否小于100，肯定小于100，打印一下时间差，然后继续调用
     </script>
 </body>
 </html>

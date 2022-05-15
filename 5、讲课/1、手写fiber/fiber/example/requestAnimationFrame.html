@@ -13,7 +13,8 @@
         let div = document.querySelector('div');
         let button = document.querySelector('button');
         let startTime;
-        function progress () {
+        function progress (rafTime) {
+            console.log(rafTime)  // 当前动画帧开始的时间
             div.style.width = div.offsetWidth+1+'px'; // 每执行一次 就让宽度加一个像素
             div.innerHTML = div.offsetWidth+'%'; // 修改文本 方便查看
             if(div.offsetWidth<100){
