@@ -1,77 +1,81 @@
-import elements  from "./element";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 
-let container = document.getElementById('root');
-
-const PLACEMENT = 'PLACEMENT'
-// 下一个工作单元
-let workInProgressRoot  = {
-  stateNode: container, //  静态节点，fiber的真实DOM
-  props: {children: [elements]}, // fiber的属性
-};
-let nextUnitOfWork = workInProgressRoot;
 
 
-function workLoop(){
-  while(nextUnitOfWork){ 
-    nextUnitOfWork = performUnitOfWork(nextUnitOfWork) // 返回下一个工作单元
-    console.log(nextUnitOfWork, 'nextUnitOfWork')
 
-  }
-}
+let element = (
+    <div id="A1">
+        <div id="B1">
+            <div id="C1"></div>
+            <div id="C2"></div>
 
-function performUnitOfWork (workingInProgressFiber) { // workingInProgressFiber
-  beginWork(workingInProgressFiber)
-  if(workingInProgressFiber.child){
-    return workingInProgressFiber.child
-  }
-  while(workingInProgressFiber){
-    if(workingInProgressFiber.sibling){
-      return workingInProgressFiber.sibling
+        </div>
+        <div id="B2"></div>
+
+    </div>
+)
+
+let elementDOM = {
+    "type": "div",
+    "props": {
+      "id": "A1",
+      "children": [
+        {
+          "type": "div",
+          "props": {
+            "id": "B1",
+            "children": [
+              {
+                "type": "div",
+           
+                "props": {
+                  "id": "C1"
+                }
+              },
+              {
+                "type": "div",
+                "props": {
+                  "id": "C2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "div",
+     
+          "props": {
+            "id": "B2"
+          }
+        }
+      ]
     }
-    workingInProgressFiber = workingInProgressFiber.render;
-
   }
 
+  // 1、如果层级特别多，特别深，无法暂停。可能会导致页面的卡顿
+  // 2、JS单线程，渲染和JS是互斥的，
+function render(
+    element, // 虚拟DOM
+    parentDom // 真实DOM
+){
+    // 创建DOM元素
+    let dom = document.createElement(element.type)
 
-}
-
-function beginWork (workingInProgressFiber) {
-  console.log(workingInProgressFiber, 'workingInProgressFiber')
-  if(!workingInProgressFiber.stateNode){
-    workingInProgressFiber.stateNode = document.createElement(workingInProgressFiber.type);
-    for(let key in workingInProgressFiber){
-      if(key !== 'children'){
-        workingInProgressFiber.stateNode[key] = workingInProgressFiber.props[key];
-      }
-    }
-  }
-
-  // 创建子fiber
-  let perviousFiber;
-
-  if(Array.isArray(workingInProgressFiber.props.children)){
-    workingInProgressFiber.props.children.forEach((item,index)=>{
-      let childFiber={
-        type: item.type,
-        props: item.props,
-        return: workingInProgressFiber,
-        effectTag:PLACEMENT
-      }
-
-      if(index === 0) {
-        workingInProgressFiber.child = childFiber
-      } else {
-        perviousFiber.sibling = childFiber
-      }
-      perviousFiber = childFiber
-
+    Object.keys(element.props)
+    .filter(item=> item !== 'children')
+    .forEach(key=>{
+        dom[key] = element.props[key] // 属性挂载
     })
-  }
 
-
-
+    if(Array.isArray(element.props.children)){
+        element.props.children.forEach(child=>{
+            console.log(JSON.stringify(child, null, 2), 'child')
+            render(child, dom)
+        })
+    }
+    parentDom.appendChild(dom)
 
 }
-
-requestIdleCallback(workLoop)
+render(element, document.getElementById('root'))
