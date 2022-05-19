@@ -74,29 +74,36 @@ function insertSort(arr){
 
 
 
-function quickSort(arr) {
+
+function quickSort(arr){
     if(arr.length < 1){
-        return arr;
+        return arr
     }
-    let left = [],
-        right = [],
-        current = arr.splice(0, 1);
-    for(let i = 0; i < arr.length; i++){
-        if(arr[i] < current){
+    let left=[],
+        right=[],
+        current = arr.splice(0,1);
+
+    for(let i = 0; i< arr.length; i++){
+        if(arr[i]< current){
             left.push(arr[i])
         } else {
             right.push(arr[i])
         }
     }
-    
-
     return quickSort(left).concat(current, quickSort(right))
 }
 
 
+
+
+console.log(quickSort(nums))
+
+
+
 console.log(quickSort(nums))
 // 快速排序
-// 选择一个基准数，选基准数的时候注意不要赋值，用splice等手段把数组的长度也降低
+// 先判断如果数组的长度小于1 那么返回数组,相当于递归只有一个值 就返回
+// 创建左右各两个数组，选择一个基准数，选基准数的时候注意不要赋值，用splice等手段把数组的长度也降低
 // 然后把剩下的数对比这个基准数 放在 两侧的数组中
 // 递归对左右两侧的数组重复这个步骤
 // 最后使用concat拼接
