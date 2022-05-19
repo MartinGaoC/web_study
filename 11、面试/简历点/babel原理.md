@@ -8,3 +8,7 @@
     - 将源代码转换成AST
     - 词法分析：字符流源代码（Char Stream）转换成令牌流（Token Stream）
     - 语法分析：令牌流转换为抽象语法树
+* 二阶段 转换（Transform）
+    - 通过babel的插件能力，把高版本AST转换成低版本AST
+* 三阶段 生成（Generate）
+    - AST转换为字符串形式的低版本代码，同时创建Source Map映射

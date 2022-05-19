@@ -1,8 +1,31 @@
 # React fiber
 
-* fiber是React 16 更新出来的底层解决方案，为了解决React15之前虚拟dom构建不能中断的问题
-* 底层调度是使用了requestAnimationFrame、requestIdleCallback、MessageChannel等window Api。
-* 达到了初始化dom构建dom的过程是可以被中断的目的，从而提高响应用户操作的速度
+# 背景
+* react在进行渲染的时候，从setState开始到渲染完成整个过程是同步的，如果需要渲染的组件比较大，js执行会长时间占据主线程，导致页面响应效果变差，使react在动画、手势方面应用效果比较差。
+* 如果有庞大的dom树，解析dom树的过程就会很长，任何的交互布局渲染都会停止，给用户的感觉就像是卡住了
+
+# 原理
+* 旧版React通过递归的方式进行渲染，使用的是JS引起自身的函数调用栈，一直执行到空栈
+* fiber是自己实现了组件调用栈，以链表的形式遍历组件树，可以灵活的暂停、继续和丢弃执行任务，实现方式是使用了浏览器的requestIdleCallback api，fiber其实是一种数据结构，可以用一个纯JS对象来表示
+
+# 内部运转
+* react内部运转分为三层
+  - VirtualDOM（虚拟dom）层 描述页面长什么样子
+  - Reconciler（识别执行）层 负责调用组件声明周期方法，进行Diff运算
+  - Renderer层 根据不同的平台渲染不同的页面
+
+* FiberReconclier 执行过程
+  - 阶段一：生成一个Fiber树，得出需要更新的节点信息，这一步是一个渐进的过程可以被打断
+  - 阶段二：将需要更新的节点一次批量更新，这个过程不能被打断
+
+
+* Fiber树
+* fiber在阶段一进行diff计算的时候，会基于virtual DOM树生成一颗Fiber树，本质是链表
+
+
+
+* 底层调度是使用了requestAnimationFrame、requestIdleCallback、MessageChannel等window Api。  底层逻辑
+* 达到了初始化dom构建dom的过程是可以被中断的目的，从而提高响应用户操作的速度   
 * fiber把babel转译过的虚拟dom节点 转换成为了fiber节点，fiber节点了包括stateNode、child、effTag、副作用链条等字段
 
 * 基于Fiber构成的虚拟DOM树就是Fiber架构
