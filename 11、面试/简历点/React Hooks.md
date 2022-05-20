@@ -1,3 +1,5 @@
+* react16.8加入了hooks
+
 ## React Hooks实现原理
 * React会维护两个链表，一个是CurrentHook，一个是WorkingProgressHook
 * 每一个节点类型都是hook
