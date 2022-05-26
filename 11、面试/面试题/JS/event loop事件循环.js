@@ -16,7 +16,7 @@
 
 // 微任务、宏任务
 // 为了处理高优先级的任务，解决单任务执行时间过长的问题
-// 微任务 promise then 回调 async await  node中的process,.nextTick
+// 微任务 promise then 回调 async await  node中的process.nextTick
 
 
 // 事件循环

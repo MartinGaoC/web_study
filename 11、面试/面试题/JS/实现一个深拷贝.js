@@ -27,6 +27,9 @@ function clone (target, weakmap = new WeakMap()) {
 
 
 
+
+
+
 let deepObj = clone(obj)
 deepObj.age = 26
 deepObj.hobby[0] = '赚钱'

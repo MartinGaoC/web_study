@@ -96,8 +96,6 @@ function quickSort(arr){
 
 
 
-console.log(quickSort(nums))
-
 
 
 console.log(quickSort(nums))
