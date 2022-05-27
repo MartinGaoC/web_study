@@ -82,6 +82,9 @@ Function.prototype.Mybind = function (context){
 }
 
 
+// bind给函数绑定this的值，返回一个绑特定this值的函数
+// 后面参数为函数执行的参数
+// 箭头函数可以调用bind，但是无法改变this的值，但是入参生效
 
 fn.MyApply(obj)
 
