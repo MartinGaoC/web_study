@@ -1,30 +1,31 @@
 # 
-* 1、费时分析 先下载插件speed-measure-webpack-plugins
-* 2、缩小范围，范围越小，查找越快，下边是缩小范围的手段
-    * 2.1、配置resolve 添加扩展名
+
+* 1、使用高版本的Webpack和Node.js
+* 2、多进程/多实例构建： HappyPack、Thread-loader
+* 3、压缩代码 
+    - 多进程并行压缩
+    - webpack-paralle-uglify-pluginuglifyjs-webpack-plugin 开启 parallel 参数 (不支持ES6)terser-webpack-plugin 开启 parallel 参数
+    通过 mini-css-extract-plugin 提取 Chunk 中的 CSS 代码到单独文件，通过 css-loader 的 minimize 选项开启 cssnano 压缩 CSS。
+* 4、图片压缩
+    - 使用基于 Node 库的 imagemin (很多定制选项、可以处理多种图片格式)
+    - 配置 image-webpack-loader
+
+* 5、缩小范围，范围越小，查找越快，下边是缩小范围的手段
+    * 5.1、配置resolve.extensions 尽量减少后缀尝试 
     ```
         reslove:{
             extensions: [".js", ".jsx", ".json", ".css"]
         }
     ```
-    * 2.2、配置别名alias，配置别名可以提高webpack的查找速度
-    ```
-        const bootstrap = path.resolve(__dirname,'node_modules/_bootstrap@3.3.7@bootstrap/dist/css/bootstrap.css');
-        resolve: {
-            alias:{
-                "bootstrap":bootstrap
-            }
-        }
-    ```
-    * 2.3、modules 如果可以确定项目内所有的第三方依赖模块都是在项目根目录下的node_modules 中的话,
+    * 5.2、resolve.modules 指明第三方的模块的绝对路径,
     * 设置为绝对路径
     ```
     resolve: {
         modules: [path.resolve(__dirname, 'node_modules')],
     }
     ```
-    * 2.4、mainFields 
-    * 默认情况下package.json文件按照文件中main字段的文件名来查找文件
+    * 5.3、resolve.mainFields 
+    * 只采用main字段作为入口文件描述字段（减少搜索步骤）
     ```
     resolve: {
         // 配置 target === "web" 或者 target === "webworker" 时 mainFields 默认值是：
@@ -33,7 +34,31 @@
         mainFields: ["module", "main"],
     }
     ```
-    * 2.5、resolveLoader 用于配置解析loader时的resolve配置
+    * 5.4、noParse， 
+    * 对完全不需要解析的库进行忽略，提供整体的构建速度
+    ```
+    module.exports = {
+        // ...
+        module: {
+            noParse: /jquery|lodash/, // 正则表达式
+            // 或者使用函数
+            noParse(content) {
+                return /jquery|lodash/.test(content)
+            },
+        }
+    }...
+    ```
+    * 5.5、配置别名alias，配置别名可以提高webpack的查找速度
+    ```
+        const bootstrap = path.resolve(__dirname,'node_modules/_bootstrap@3.3.7@bootstrap/dist/css/bootstrap.css');
+        resolve: {
+            alias:{
+                "bootstrap":bootstrap
+            }
+        }
+    ```
+ 
+    
     * 配置项和普通的文件一致，这个是用于loader的快速查找
     ```
     module.exports = {
@@ -44,28 +69,17 @@
         }
      };
     ```
-* 3、noParse， 用于配置那些模块文件的内容不需要解析
-* 不需要解析的依赖，可以通过这个字段来配置，提供整体的构建速度
-```
-module.exports = {
-    // ...
-    module: {
-        noParse: /jquery|lodash/, // 正则表达式
-        // 或者使用函数
-        noParse(content) {
-            return /jquery|lodash/.test(content)
-        },
-    }
-}...
-```
-
-* 4、lgnorePlugin 忽略插件
-* 用于忽略某些特定的插件，让webpack不把这些指定的模块打包进去
 
 
-* 5、日志优化
-* 配置 friendly-errors-webpack-plugin 包
+    * 5.6、lgnorePlugin 完全排除模块
+    * 用于忽略某些特定的插件，让webpack不把这些指定的模块打包进去
 
+* 6、提取页面公共资源
+    - 基础包分离：
+
+    - 使用 html-webpack-externals-plugin，将基础包通过 CDN 引入，不打入 bundle 中使用 SplitChunksPlugin 进行(公共脚本、基础包、页面公共文件)分离(Webpack4内置) ，替代了 CommonsChunkPlugin 插件
+
+* DLL、使用Dllplugin进行分包
 * 7、利用缓存
     * 7.1 babel-loader 开启babel缓存
     * babel在转译JS过程中消耗比较高，将bable-loader执行的结果缓存起来,重新打包构建的时候
@@ -122,3 +136,4 @@ module.exports = {
     * 7.4 oneOf
     * 每个文件的rules中的所有规则都会遍历一遍
     * 使用oneOf匹配了其中的一个就可以退出执行
+

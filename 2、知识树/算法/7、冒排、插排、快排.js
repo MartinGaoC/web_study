@@ -6,6 +6,9 @@ function bubbingsorts (nums) {
 
     for(let i = len; i >= 2; i--){
         for(let j = 0; j <= i - 1; j++){ // 双层for循环执行两次
+            console.log(i,'i')
+            console.log(j,'j')
+
             if(nums[j] > nums[j+1]){
                 // let temp = nums[j];
                 // nums[j] = nums[j+1]
@@ -16,7 +19,7 @@ function bubbingsorts (nums) {
     }
     return nums
 }
-// console.log(bubbingsorts(nums))
+console.log(bubbingsorts(nums))
 
 // 冒泡排序
 //  两层for循环，外层从数组的length 从大到小开始递减，最小不超过2
@@ -95,8 +98,6 @@ function quickSort(arr){
 
 
 
-
-console.log(quickSort(nums))
 
 
 
