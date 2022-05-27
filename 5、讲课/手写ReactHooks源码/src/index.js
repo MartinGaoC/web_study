@@ -6,7 +6,6 @@ function useState (initialState){
   hookState[hookIndex] = hookState[hookIndex] || initialState
   let currentIndex = hookIndex  // 利用闭包的机制, 外层hook会多次渲染 但是我只改变我点击的值得
   function setState (newState){
-
     hookState[currentIndex] = newState
     render()
   }
