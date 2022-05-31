@@ -16,3 +16,6 @@ SSH 部署：自动部署，避免逐个在所有服务器中进行 ssh
 
 支持开发调试模式：非后台运行，pm2-dev start <appName>
 
+
+# master挂了，pm2如何处理？
+* Node.js原生集群模式
