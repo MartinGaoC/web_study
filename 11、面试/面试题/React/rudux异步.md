@@ -4,11 +4,17 @@ Redux 是单项数据流，通过 actio 触发 reducer 来修改 store。redux �
 使用异步中间件，主流的三种：thunk、saga、observable
 
 # redux-thunk
-允许编写返回函数而不是 action 的创建者
+* 用于异步操作
+  - 默认情况下的dispatch(action)，action需要是一个JavaScript的对象
 
-thunk 可用于延迟 action 的发送，或仅在满足在某个条件时发送
+    redux-thunk中间件会判断你当前传进来的数据类型，如果是一个函数，将会给函数传入参数值（dispatch，getState）
 
-内部函数接收 store 的方法 dispatch 和 getState 作为参数
+
+    允许编写返回函数而不是 action 的创建者
+
+  - thunk 可用于延迟 action 的发送，或仅在满足在某个条件时发送
+
+  - 内部函数接收 store 的方法 dispatch 和 getState 作为参数
 
 优点：学习成本低，使用 promise 更简单
 

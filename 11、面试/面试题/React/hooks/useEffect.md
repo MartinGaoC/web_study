@@ -1,0 +1,13 @@
+# useEffect
+* 可以将useEffect类比为class组件中的生命周期，接受两个参数，第一个参数是函数，第二个是deps，可以返回一个函数，我们叫它清除函数
+* 当deps为空数组时，useEffect会在组件加载完成后执行一次，清除函数在组件卸载时执行
+* 当deps是一个具有变量的数组时，当deps中变量改变时，会重新执行这个函数，每次deps改变时也会执行清除函数
+* deps如果不传值则会在每次组建render时执行这个函数和清除函数
+
+
+* deps如果不传值则会在每次组建render时执行这个函数和清除函数
+
+
+* useEffect第一个参数接受一个回调函数，默认情况下，useEffect会在第一次渲染和更新之后都会执行，相当于在componentDidMount和componentDidUpdate两个生命周期函数中执行回调
+* useEffect第一个参数接受一个回调函数，默认情况下，useEffect会在第一次渲染和更新之后都会执行，相当于在componentDidMount和componentDidUpdate两个生命周期函数中执行回调
+* 所以， useEffect相当于componentDidMount，componentDidUpdate 和 componentWillUnmount 这三个生命周期函数的组合

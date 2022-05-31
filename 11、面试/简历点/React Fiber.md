@@ -1,12 +1,84 @@
 # React fiber
 
 # 背景
-* react在进行渲染的时候，从setState开始到渲染完成整个过程是同步的，如果需要渲染的组件比较大，js执行会长时间占据主线程，导致页面响应效果变差，使react在动画、手势方面应用效果比较差。
-* 如果有庞大的dom树，解析dom树的过程就会很长，任何的交互布局渲染都会停止，给用户的感觉就像是卡住了
+* JS引擎和页面渲染引擎两个线程事互斥的，react在进行渲染的时候，从setState开始到渲染完成整个过程是同步的，如果需要渲染的组件比较大，js执行会长时间占据主线程，那么渲染层的更新就不得不长时间等待，页面长时间不更新，会导致页面响应度变差，用户感觉卡
+
+* react15原理：旧版React通过递归的方式进行渲染，使用的是JS引起自身的函数调用栈，一直执行到空栈
+
+
+* 这就是react15要面临的问题，渲染过程无法中断
+* React16 为了解决这个问题
+* 1.增加了优先级
+* 2.增加了异步任务，使用requestIdleCallback.api 在浏览器空闲的时候执行
+* 3.dom diff树变成了链表，一个dom对应两个fiber，对应两个队列
+* fiber是自己实现了组件调用栈，以链表的形式遍历组件树，可以灵活的暂停、继续和丢弃执行任务，实现方式是使用了浏览器的requestIdleCallback api，fiber其实是一种数据结构，可以用一个纯JS对象来表示
+  
+* fiber节点就是一个JS对象
+  ```
+  type Fiber = {
+  // 用于标记fiber的WorkTag类型，主要表示当前fiber代表的组件类型如FunctionComponent、ClassComponent等
+  tag: WorkTag,
+  // ReactElement里面的key
+  key: null | string,
+  // ReactElement.type，调用`createElement`的第一个参数
+  elementType: any,
+  // The resolved function/class/ associated with this fiber.
+  // 表示当前代表的节点类型
+  type: any,
+  // 表示当前FiberNode对应的element组件实例
+  stateNode: any,
+
+  // 指向他在Fiber节点树中的`parent`，用来在处理完这个节点之后向上返回
+  return: Fiber | null,
+  // 指向自己的第一个子节点
+  child: Fiber | null,
+  // 指向自己的兄弟结构，兄弟节点的return指向同一个父节点
+  sibling: Fiber | null,
+  index: number,
+
+  ref: null | (((handle: mixed) => void) & { _stringRef: ?string }) | RefObject,
+
+  // 当前处理过程中的组件props对象
+  pendingProps: any,
+  // 上一次渲染完成之后的props
+  memoizedProps: any,
+
+  // 该Fiber对应的组件产生的Update会存放在这个队列里面
+  updateQueue: UpdateQueue<any> | null,
+
+  // 上一次渲染的时候的state
+  memoizedState: any,
+
+  // 一个列表，存放这个Fiber依赖的context
+  firstContextDependency: ContextDependency<mixed> | null,
+
+  mode: TypeOfMode,
+
+  // Effect
+  // 用来记录Side Effect
+  effectTag: SideEffectTag,
+
+  // 单链表用来快速查找下一个side effect
+  nextEffect: Fiber | null,
+
+  // 子树中第一个side effect
+  firstEffect: Fiber | null,
+  // 子树中最后一个side effect
+  lastEffect: Fiber | null,
+
+  // 代表任务在未来的哪个时间点应该被完成，之后版本改名为 lanes
+  expirationTime: ExpirationTime,
+
+  // 快速确定子树中是否有不在等待的变化
+  childExpirationTime: ExpirationTime,
+
+  // fiber的版本池，即记录fiber更新过程，便于恢复
+  alternate: Fiber | null,
+}
+  ```
 
 # 原理
-* 旧版React通过递归的方式进行渲染，使用的是JS引起自身的函数调用栈，一直执行到空栈
-* fiber是自己实现了组件调用栈，以链表的形式遍历组件树，可以灵活的暂停、继续和丢弃执行任务，实现方式是使用了浏览器的requestIdleCallback api，fiber其实是一种数据结构，可以用一个纯JS对象来表示
+
 
 # 内部运转
 * react内部运转分为三层
