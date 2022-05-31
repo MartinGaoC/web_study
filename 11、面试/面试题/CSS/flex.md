@@ -10,9 +10,19 @@
 有六个属性：
 
 flex-direction
+    row（该值为默认值）：主轴为水平方向，起点在左端
+    row-reverse：主轴为水平方向，起点在右端
+    column：主轴为垂直方向，起点在上沿
+    column-reverse：主轴为垂直方向，起点在下沿
+
 flex-wrap
 flex-flow
 justify-content
+    flex-start（该值是默认值）：左对齐
+    flex-end：右对齐
+    center：居中对齐
+    space-between：两端对齐，各个项目之间的间隔均相等
+    space-around：各个项目两侧的间隔相等
 align-items
 align-content
 

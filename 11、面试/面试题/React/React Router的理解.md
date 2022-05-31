@@ -1,0 +1,28 @@
+# 一、是什么？
+* react-router 页面的URL发生改变，页面的显示结果更着变化，但是页面不会刷新
+  - react-router-dom：基于react-router 加入了浏览器运行环境下的一些功能
+    - react-router: 实现了路由的核心功能
+    - BrowserRouter、HashRouter
+      - 对路径改变的监听
+      - 使用两者作为最顶层组件包裹其他组件
+    - Route
+      - path属性：用于设置匹配到的路径
+      - component属性：匹配路径后要渲染的组件
+      - render属性
+      - exact 开启精确匹配
+    - Link、NavLink
+      - 通常用link会被渲染成a标签
+    - switch
+      - 群组：匹配到一个就不继续往下匹配了
+    - redirect
+      - 重定向：会执行跳转到对应的to路径中，常见于登录
+    - withRouter
+      - 高阶组件，获取history
+      - 面包屑使用
+    - useRouterMatch
+      - 接收一个path字符串作为参数，当参数的path与当前路径匹配时，会返回match对象，否则返回inull
+    - useHistory
+    - useParams
+    - useLocation
+  - react-router-native: 加入了react-native运行环境下的一些功能
+  - react-router-config： 用于配置静态路由的工具库

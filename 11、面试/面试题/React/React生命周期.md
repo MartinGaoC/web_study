@@ -38,7 +38,7 @@ state 更新时（具体同上）
 1. componentWillUnmount
    在组件卸载及销毁之前直接调用。在此方法中执行必要的清理操作，例如，清除 timer，取消网络请求或清除在 componentDidMount  中创建的订阅等。componentWillUnmount 中不应调用 setState，因为该组件将永远不会重新渲染。组件实例卸载后，将永远不会再挂载它。
 
-复制代码
+
 在 React 16 中官方已经建议删除以下三个方法，非要使用必须加前缀：UNSAVE_ 。
 componentWillMount;
 componentWillReceiveProps;
@@ -50,7 +50,7 @@ componentWillUpdate;
 2. getSnapshotBeforeUpdate（prevProps,prevState）
    在这个阶段我们可以拿到上一个状态 Dom 元素的坐标、大小的等相关信息。用于替代旧的生命周期中的 componentWillUpdate。
    该函数的返回值将会作为 componentDidUpdate 的第三个参数出现。
-复制代码
+
 需要注意的是，一般都会问为什么要废弃三个生命周期，原因是什么。
 
 
