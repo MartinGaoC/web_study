@@ -130,3 +130,5 @@ promise.then((value)=>{
 },(reason)=>{
     console.log('reject', reason)
 })
+
+

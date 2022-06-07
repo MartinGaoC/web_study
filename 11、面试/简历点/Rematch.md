@@ -4,3 +4,8 @@
 * rematch如何工作的？
 * 项目中使用了 rematch, 把根节点传入withRematch中，进行store的初始化
 * 使用rematch-loading添加了effects到Rematch
+
+
+
+* 复杂组件，重复的被复用
+* 状态数据要求隔离

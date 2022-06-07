@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>interator</title>
+</head>
+<body>
+    <script>
+        const p = new Promise(function(resolve, reject){
+            // new一个xhr对象
+            const xhr = new XMLHttpRequest();
+            // 初始化
+            xhr.open("GET", 'https://ali-cyb-cdn.kaikeba.com/kkb-plat/fanchang/fanchangTest.jsons');
+
+            // 发送
+            xhr.send()
+
+            // 绑定时间 处理响应结果
+
+            xhr.onreadystatechange = function () {
+                if(xhr.readyState === 4){
+                    // 判断响应状态
+                    if(xhr.status >= 200 & xhr.status < 300){
+                        resolve(xhr.response)
+                    } else {
+                        reject(xhr.status)
+                    }
+
+                }
+            }
+        })
+
+        p.then(function (value){
+            console.log(value)
+        }, function(reason){
+            console.log(reason)
+        })
+       
+
+
+
+    </script>
+</body>
+</html>
