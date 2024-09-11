@@ -23,3 +23,19 @@ function throttle(event, time){
         }
     }
 }
+
+
+let a = [1,2,3,[4,[5]]]
+console.log(a.flat(Infinity))
+
+const person = {
+    name: '一碗周',
+    age: '18',
+  }
+  const e = Object.entries(person)
+  console.log(e) // { name: '一碗周', age: '18' }
+
+  const p = Object.fromEntries(e)
+  console.log(p) // { name: '一碗周', age: '18' }
+  
+  

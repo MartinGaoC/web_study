@@ -1,0 +1,1 @@
+* bi探针的主要功能是向用户的页面中插入一个压缩后的js文件，js文件会通过Performance API 提供的timing（目前放弃使用了）、resources、event返回页面如dom的构建时间、ajax使用的时间，资源的加载时间，然后通过ajax、img、from、jsonp等消息回传方式返回

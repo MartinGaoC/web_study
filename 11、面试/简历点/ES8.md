@@ -3,7 +3,7 @@
 * 异步编程的新解决方案
 * 简化异步函数的写法，promise语法糖，让异步代码像同步代码一样
     - async 函数
-    - 默认返回一个promise对象，只要返回的不是promise对象，都是返回默认成功态的promise对象
+    - 默认返回一个对象，只要返回的不是promise对象，都是返回默认成功态的promise对象
     - 返回的是一个promise对象的话，返回的promise结果会套用返回promise的状态
     - await 表达式
     - await必须写在async 函数中（单向依赖）
