@@ -32,6 +32,11 @@ let const  变量以及常量  块级作用域 不会自动进行变量提升
 ... 结构赋值   对数组
 
 Promise
+* 字符串优化
+    - 模版字符串
+    - includes
+    - startWith
+    - enWith
 
 
 # es7
@@ -89,3 +94,53 @@ console.log(arr.at(-1))  // 5
 * Array.prototype.findLastIndex() 反向迭代数组，返回满足要求的第一个索引， 没有返回-1
 * Array.prototype.with()  通过索引修改制定的数组值
  
+
+
+# new 关键词
+ - 新生成一个对象
+ - 链接到原型
+ - 绑定this
+ - 返回一个新对象
+
+# apply call 和bind
+ - 主要作用是用来改变函数执行是上下文中this的指向
+ - 区别
+ - apply 接收两个参数 第一个是this的新指向， 第二个是函数的参数数组。使用后立即执行 只会临时改变一次this指向
+ - call  接收一个参数列表
+ - bind 和其他两个参数不同 使用后不会立即执行 会返回一个改变了this指向的新函数
+
+ # 事件代理
+    - 用父级代替子级完成事件
+
+# 面向对象
+    - 面向对象是一种编程思想，相对于面向过程来说，面向对象会把属性和方法抽象成对象，让对象去解决问题。
+    js中主要是用原型来实现
+    三个特点
+    - 封装不对外暴露隐藏的属性和方法
+    - 可以实现继承
+    - 多态 父类的接口也可以指向子类或者实例
+
+# 阻止事件冒泡
+    event.stopPropagation()
+    event.preventDefault()
+    return false
+
+# await在等什么
+    await在等等async函数的返回值
+
+# 数组扁平化
+
+let a = [1,2,[3,[4]]]
+a.flat(Infinity)
+
+递归处理
+
+reducer处理
+
+# 数组去重
+ 使用 new set 去处理
+ 单层for循环 includes 处理
+
+ # 判断NAN
+typeof判断类型是number  以及isNaN
+利用NAN不等于自身的特性进行判断
